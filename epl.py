@@ -111,10 +111,10 @@ class epl2_gen(object):
         self.s  = s  #speed
         
     def _enc(self, c):
-        return c.encode(self.cp[1])
+        return c.encode(self.cp.value[1])
     
     def _cmd(self, c):
-        self._enc(c + '\n')
+        return self._enc(c + '\n')
         
     def text(self, x,y,rot,font,sx,sy,inv,txt):
         '''
@@ -132,7 +132,7 @@ class epl2_gen(object):
                 )
         return self._cmd(command)
     
-    def img(self, x, y, im, crop):
+    def img(self, x, y, im, crop = epl2_crop.C):
         '''
         TODO: add arg check
         '''
@@ -171,13 +171,13 @@ class epl2_gen(object):
         
     def setup(self):
         cmd  = self._cmd('q%d' % int(self.w))
-        cmd += self._cmd('Q%d%d' % (int(self.h[0]), int(self.h[1])))
+        cmd += self._cmd('Q%d,%d' % (int(self.h[0]), int(self.h[1])))
         cmd += self._cmd('ZT')
         cmd += self._cmd('S%d' % int(self.s))
         cmd += self._cmd('D%d' % int(self.d))
         cmd += self._cmd('O')
         cmd += self._cmd('UN')
-        cmd += self._cmd('I8,%s,%s' % (str(self.cp[0]), str(self.cc)))
+        cmd += self._cmd('I8,%s,%s' % (str(self.cp.value[0]), str(self.cc)))
         cmd += self._cmd('JF')
         
         return cmd
